@@ -1,7 +1,7 @@
 # Search Engine Project
 
 ## Team:
-Brandon, Terry, Reggie, Chris
+Brandon, Terry Miller, Reggie, Chris
 
 ## Requirements:
 - Web Crawler and CLI Lookup tool
