@@ -8,7 +8,7 @@ import re
 
 #Defining pages
 starting_page = "https://en.wikipedia.org/wiki/Roman_Empire"
-seed_page = "https://en.wikipedia.org"  #Crawling the English Wikipedia
+seed_page = "https://en.wikipedia.org"  #Crawling English side of Wikipedia
 
 
 #Downloading entire Web Document (Raw Page Content)
@@ -32,8 +32,6 @@ def extract_title(page):
     title = page[end_start_title + 1 : stop_title]
     return title
 
-
-
 #####################################################################
 #Extract the see also section elements
 def extract_see_also(page):
@@ -51,7 +49,6 @@ def extract_see_also(page):
         flag = 1
     return pure_item, flag
 
-
 #Extract just the Introduction part of the page
 def extract_introduction(page):
     start_introduction = page.find("<p>")
@@ -68,7 +65,6 @@ def extract_introduction(page):
     return raw_introduction
 
 
-
 #Extract all the links
 #Finding 'Next Link' on a given web page
 def get_next_link(s):
@@ -83,7 +79,6 @@ def get_next_link(s):
         link = str(s[start_quote+1:end_quote])
         return link, end_quote
           
-
 #Getting all links with the help of 'get_next_links'
 def get_all_links(page):
     links = []
@@ -98,14 +93,11 @@ def get_all_links(page):
     return links 
 
 
-
 #Remove all the HTML tags from the introduction to get the pure text
 #Eliminate all the text inside '<' & '>'
 def extract_pure_introduction(page):
-    pure_introduction = (re.sub(r'<.+?>', '', page))       #From '<' to the next '>'
+    pure_introduction = (re.sub(r'<.+?>', '', page)) 
     return pure_introduction
-
-
 
 #Crawl Initiation
 #Check for file type in URL so crawler does not crawl images and text files
@@ -172,13 +164,9 @@ def url_parse(url):
         i = i+1
         s = urlparse(url)   #Parse after every loop to update the values of url parameters
     return(url, flag)
-
-
      
 t0 = time.time()
 database = {}   #Create a dictionary
-
-
 
 
 #Main Crawl function that calls all the above function and crawls the entire site sequentially
