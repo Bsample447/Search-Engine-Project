@@ -50,7 +50,7 @@ class Database():
                          foreign key(url_id) references URLs(urls_id))"""],
                         ["Blacklist", 
                          """(blacklist_id integer primary key, 
-                         blacklist varchar(64) unique)"""],
+                         blacklist varchar(64) unique)"""]]
 
         for i in _schema_list:
             if self.exists(i[0]) == False:
