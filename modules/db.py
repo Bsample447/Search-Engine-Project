@@ -1,5 +1,4 @@
 import sqlite3
-
 class Database():
     def __init__(self):
         pass
@@ -48,12 +47,13 @@ class Database():
         _schema_list = [["Keywords", "(keyword_id integer primary key, keyword varchar(64) unique)"],
                         ["URLs", "(url_id int primary key, url text unique, last_update datetime)"],
                         ["Keywords_URLs", """(keyword_id integer, url_id integer,
-                                              foreign key(keyword_Id) references Keywords(keyword_id),
-                                              foreign key(url_id) references URLs(urls_id))"""],
-                        ["Blacklist", "(blacklist_id integer primary key, blacklist varchar(64) unique)"],
+                         foreign key(keyword_Id) references Keywords(keyword_id),
+                         foreign key(url_id) references URLs(urls_id))"""],
+                        ["Blacklist", 
+                         "(blacklist_id integer primary key, blacklist varchar(64) unique)"],
                         ["Keywords_Blacklist", """(keyword_id integer, blacklist_id integer,
-                                                   foreign key(keyword_id) references Keyword(keyword_id),
-                                                   foreign key(blacklist_id) references Blacklist(blacklist_id))"""]]
+                         foreign key(keyword_id) references Keyword(keyword_id),
+                         foreign key(blacklist_id) references Blacklist(blacklist_id))"""]]
 
         for i in _schema_list:
             if self.exists(i[0]) == False:
