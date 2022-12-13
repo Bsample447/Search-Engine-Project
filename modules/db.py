@@ -21,6 +21,14 @@ class Database():
             return False
 
         self.close()
+    
+    def add(self, url, keyword):
+        self.connect()
+        self.cur.execute(f"insert into URLs(url) values({url})")
+        self.cur.execute(f"insert into Keywords(keyword) values({keyword})")
+        self.close()
+
+
 
     def create_table(self, table, columns):
         self.connect()
@@ -46,7 +54,7 @@ class Database():
         self.connect()
         
         _schema_list = [["Keywords", "(keyword_id integer primary key, keyword varchar(64) unique)"],
-                        ["URLs", "(url_id int primary key, url text unique, last_update datetime)"],
+                        ["URLs", "(url_id int primary key, url text unique, description text unique"],
                         ["Keywords_URLs", """(keyword_id integer, url_id integer,
                                               foreign key(keyword_Id) references Keywords(keyword_id),
                                               foreign key(url_id) references URLs(urls_id))"""],
