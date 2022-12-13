@@ -178,11 +178,11 @@ def web_crawl():
     #k = 0;
     for k in range(0, 3):
         i=0        #Initiate Variable to count No. of Iterations
-        while i<3:     #Continue Looping till the 'to_crawl' list is not empty
-            urll = to_crawl.pop(0)      #If there are elements in to_crawl then pop out the first element
-            urll,flag = url_parse(urll)
+        while i<5:     #Continue Looping till the 'to_crawl' list is not empty
+            urlLink = to_crawl.pop(0)      #If there are elements in to_crawl then pop out the first element
+            urlLink,flag = url_parse(urlLink)
             #print(urll)
-            flag2 = extension_scan(urll)
+            flag2 = extension_scan(urlLink)
             time.sleep(3)
             
             #If flag = 1, then the URL is outside the seed domain URL
@@ -190,12 +190,12 @@ def web_crawl():
                 pass        #Do Nothing
                 
             else:       
-                if urll in crawled:     #Else check if the URL is already crawled
+                if urlLink in crawled:     #Else check if the URL is already crawled
                     pass        #Do Nothing
                 else:       #If the URL is not already crawled, then crawl i and extract all the links from it
-                    print("Link = " + urll)
+                    print("Link = " + urlLink)
                     
-                    raw_html = download_page(urll)
+                    raw_html = download_page(urlLink)
                     #print(raw_html)
                     
                     title_upper = str(extract_title(raw_html))
@@ -211,7 +211,7 @@ def web_crawl():
                     #print("Raw Introduction = " + raw_introduction)
                     
                     to_crawl = to_crawl + get_all_links(raw_introduction)
-                    crawled.append(urll)
+                    crawled.append(urlLink)
                     
                     pure_introduction = extract_pure_introduction(raw_introduction)
                     print("Introduction = " + pure_introduction.replace('   ',' '))
