@@ -19,7 +19,7 @@ What would you like to do?
 """)
     if option == "1":
         clr()
-        search_input()
+        keyword_input()
     elif option == "2":
         pass
     elif option == "3":
@@ -42,19 +42,16 @@ What would you like to do?
 
 
 
-def search_input():                  #searches db.py for a specific keyword
-    print("'This searches db.py for key word(s)'")
+def keyword_input():                  #grabs user input and lower cases it then throws it to 'search_db'
     keyword = str(input(f"Type the key word(s) you would like to search for. \n")).lower()
     search_db(keyword)
-    #    pass                        #if keyword matches what is in db, pull the db file.
-    #else:
-    #    run_crawler()               #if keyword has no matches, run the crawler for the keyword
+
 
 def search_db(keyword):
-    if keyword == "mountain":
+    if keyword == "mountain":           #if keyword matches what is in db, pull the db file.
         pass
     else:
-        run_crawler(keyword)
+        run_crawler(keyword)            #if keyword has no matches, run the crawler for the keyword
 
 def run_crawler(keyword):                  #will run the crawler with user input
     print(keyword)
