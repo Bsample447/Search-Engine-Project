@@ -42,14 +42,22 @@ class Database():
         self.close()
 
     def create_schema(self):
-        _schema_list = [["Keywords", "(keyword_id integer primary key, keyword varchar(64) unique)"],
-                        ["URLs", "(url_id integer primary key, url text unique, description text unique)"],
-                        ["Keywords_URLs", """(keyword_id integer, url_id integer,
-                         foreign key(keyword_id) references Keywords(keyword_id),
-                         foreign key(url_id) references URLs(urls_id))"""],
-                        ["Blacklist", 
-                         """(blacklist_id integer primary key, 
-                         blacklist varchar(64) unique)"""]]
+        _schema_list = [["Keywords", """(
+                           keyword_id integer primary key, 
+                           keyword varchar(64) unique)"""],
+                        ["URLs", """(
+                           url_id integer primary key, 
+                           url text unique, 
+                           description text unique)"""],
+                        ["Keywords_URLs", """(
+                            keyword_id integer, 
+                            url_id integer,
+                            foreign key(keyword_id) references Keywords(keyword_id),
+                            foreign key(url_id) references URLs(urls_id),
+                            unique (keyword_id, url_id))"""],
+                        ["Blacklist", """(
+                            blacklist_id integer primary key, 
+                            blacklist varchar(64) unique)"""]]
 
         for i in _schema_list:
             if self.exists(i[0]) == False:
@@ -61,17 +69,36 @@ class Database():
     def add(self, url, keywords, desc):
         self.connect()
 
-        try:
-            self.cur.execute(f"insert into URLs(url) values('{url}')")
-            print(f'{url} added into URL table')
-        except:
-            print(f'{url} already exists in URL table')
+        self.cur.execute(f"""insert or ignore 
+                               into URLs(url, description) 
+                               values('{url}', '{desc}')""")
 
         for keyword in keywords:
-            try:
-                self.cur.execute(f"insert into Keywords(keyword) values('{keyword}')")
-                print(f'{keyword} added into Keyword table')
-            except Exception as e:
-                print(f'{keyword} already exists in Keyword table\n', e)
+            self.cur.execute(f"""insert or ignore
+                                   into Keywords(keyword) 
+                                   values('{keyword}')""")
+
+            self.cur.execute(f"select url_id from urls where url = '{url}'")
+            url_id = self.cur.fetchone()[0]
+
+            self.cur.execute(f"select keyword_id from keywords where keyword = '{keyword}'")
+            keyword_id = self.cur.fetchone()[0]
+
+            self.cur.execute(f"""insert or ignore
+                                   into Keywords_URLs (keyword_id, url_id)
+                                   values ('{keyword_id}', '{url_id}')""")
 
         self.close()
+
+    def crawled(self):
+        self.connect()
+        self.cur.execute(f"select url from URLs")
+        url_list = []
+        tmp = self.cur.fetchall()
+        ind = 0
+        self.close()
+
+        for url in tmp:
+            url_list += [url[0]]
+
+        return url_list
