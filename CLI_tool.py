@@ -19,7 +19,7 @@ What would you like to do?
 """)
     if option == "1":
         clr()
-        search_menu()
+        search_input()
     elif option == "2":
         pass
     elif option == "3":
