@@ -27,9 +27,7 @@ What would you like to do?
     elif option == "4":
         exit()
     else:
-        input("""
-    Enter a number between 1 and 4.
-""")
+        input("Enter a number between 1 and 4.")
         clr()
         return user_menu()
 
