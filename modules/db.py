@@ -72,8 +72,8 @@ class Database():
         self.connect()
 
         self.cur.execute(f"""insert or ignore 
-                               into URLs(url, description) 
-                               values('{url}', '{desc}')""")
+                               into URLs(url) 
+                               values('{url}')""")
 
         for keyword in keywords:
             self.cur.execute(f"""insert or ignore
