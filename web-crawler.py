@@ -168,6 +168,9 @@ def url_parse(url):
 t0 = time.time()
 database = {}   #Create a dictionary
 
+# def keyWord():
+    # tbd
+
 
 #Main Crawl function that calls all the above function and crawls the entire site sequentially
 def web_crawl():  
@@ -176,14 +179,14 @@ def web_crawl():
     crawled=[]      #Define list name 'Seed Page'
     #database = {}   #Create a dictionary
     #k = 0;
-    for k in range(0, 3):
+    for k in range(0, 5):
         i=0        #Initiate Variable to count No. of Iterations
-        while i<5:     #Continue Looping till the 'to_crawl' list is not empty
+        while i<10:     #Continue Looping till the 'to_crawl' list is not empty
             urlLink = to_crawl.pop(0)      #If there are elements in to_crawl then pop out the first element
             urlLink,flag = url_parse(urlLink)
             #print(urll)
             flag2 = extension_scan(urlLink)
-            time.sleep(3)
+            time.sleep(0.1)
             
             #If flag = 1, then the URL is outside the seed domain URL
             if flag == 1 or flag2 == 1:
@@ -194,17 +197,20 @@ def web_crawl():
                     pass        #Do Nothing
                 else:       #If the URL is not already crawled, then crawl i and extract all the links from it
                     print("Link = " + urlLink)
+                    print()
+                    # keyword = getKeyword(urlLink) ========= to be used by def 
+                    
                     
                     raw_html = download_page(urlLink)
                     #print(raw_html)
                     
                     title_upper = str(extract_title(raw_html))
                     title = title_upper.lower()     #Lower title to match user queries
-                    print("Title = " + title)
+                    #print("Title = " + title)
                     
                     
                     see_also,flag2 = extract_see_also(raw_html)
-                    print("Related Links = " + see_also)
+                    #print("Related Links = " + see_also)
                     
                     
                     raw_introduction = extract_introduction(raw_html)
@@ -220,7 +226,7 @@ def web_crawl():
                     
                     #Writing the output data into a text file
                     file = open('database.txt', 'a')        #Open the text file called database.txt
-                    file.write(title + ": " + "\n")         #Write the title of the page
+                    #file.write(title + ": " + "\n")         #Write the title of the page
                     file.write(pure_introduction + "\n\n")      #write the introduction of that page
                     #file.write() # need to write workable links next step! <================================================================================= * IMPORTANT !
                     file.close()                            #Close the file
@@ -238,8 +244,17 @@ def web_crawl():
                             pass     #Do Nothing
                         j = j+1
                 i=i+1  
+                print()
+                print("# of links from current page")
                 print(i)
+                print()
+                print("# of crawled links from last crawled page")
                 print(k)
+                print()
+                print("Total links crawled")
+                print(i+k*10)
+                print()
+                print("=========================== Next page ===================")
                 #print(to_crawl)
                 #print("Iteration No. = " + str(i))
                 #print("To Crawl = " + str(len(to_crawl)))
@@ -247,6 +262,7 @@ def web_crawl():
     return ""
 
 print (web_crawl())
+print()
 
 t1 = time.time()
 total_time = t1-t0
