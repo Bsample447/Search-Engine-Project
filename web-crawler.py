@@ -6,6 +6,7 @@ import urllib.request    #Extracting web pages
 import re
 
 
+
 #Defining pages
 starting_page = "https://en.wikipedia.org/wiki/Roman_Empire"
 seed_page = "https://en.wikipedia.org"  #Crawling English side of Wikipedia
