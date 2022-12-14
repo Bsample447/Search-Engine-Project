@@ -1,10 +1,13 @@
 #Wikipedia Crawler V2.0 (inserting results into MySQL)
 # For Embry riddle Applied Information Technology Skillbridge project, by: Brandon Saple, Chris Light, Terry Miller, and Reggie Ware 
 
+import sqlite3
 import time    
 import urllib.request    #Extracting web pages
 import re
+from modules import db
 
+db = db.Database()
 
 
 #Defining pages
@@ -265,8 +268,16 @@ def web_crawl():
                 #print("Crawled = " + str(len(crawled)))
     return ""
 
-print (web_crawl())
-print()
+
+
+
+if __name__ == "__main__":
+    db.create_schema()
+    print (web_crawl())
+    print()
+
+    
+
 
 t1 = time.time()
 total_time = t1-t0
