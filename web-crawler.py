@@ -180,7 +180,7 @@ def getKeyword(url):
 
         return len(w) >= 3 and w not in blacklist
 
-    return list(filter(lambda x: validWord, url.split('/')[-1].split('_')))
+    return list(filter(validWord, url.split('/')[-1].split('_')))
 
 
 
