@@ -11,7 +11,9 @@ db = db.Database()
 
 
 #Defining pages
-starting_page = "https://en.wikipedia.org/wiki/Roman_Empire"
+#starting_list = ["https://en.wikipedia.org/wiki/Roman_Empire"]
+#starting_list += db.crawled()
+#starting_page = starting_list[-1]
 seed_page = "https://en.wikipedia.org"  #Crawling English side of Wikipedia
 
 
@@ -186,7 +188,10 @@ def getKeyword(url):
 
 
 #Main Crawl function that calls all the above function and crawls the entire site sequentially
-def web_crawl():  
+def web_crawl():
+    starting_list = ["https://en.wikipedia.org/wiki/Roman_Empire"]
+    starting_list += db.crawled()
+    starting_page = starting_list[-1]  
     to_crawl = [starting_page]      #Define list name 'Seed Page'
     #print(to_crawl)
     crawled=[]      #Define list name 'Seed Page'
@@ -236,7 +241,7 @@ def web_crawl():
                     crawled.append(urlLink)
                     
                     pure_introduction = extract_pure_introduction(raw_introduction)
-                    print("Introduction = " + pure_introduction.replace('   ',' '))
+                    #print("Introduction = " + pure_introduction.replace('   ',' '))        ================  Paused printing of intro section
                     
                     database [title] = pure_introduction        #Add title and its introduction to the dict
                     
@@ -244,7 +249,7 @@ def web_crawl():
                     #file = open('database.txt', 'a')        #Open the text file called database.txt
                     #file.write(title + ": " + "\n")         #Write the title of the page
                     #file.write(pure_introduction + "\n\n")      #write the introduction of that page
-                    #file.write() # need to write workable links next step! <================================================================================= * IMPORTANT !
+                    #file.write() #
                     #file.close()                            #Close the file
                     
     
