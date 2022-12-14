@@ -173,7 +173,16 @@ t0 = time.time()
 database = {}   #Create a dictionary
 
 def getKeyword(url):
-  return url.split('/')[-1].replace('_', ' ').lower()
+    url = url.lower()
+
+    def validWord(w):
+        blacklist = ["the", "and"] 
+
+        return len(w) >= 3 and w not in blacklist
+
+    return list(filter(validWord, url.split('/')[-1].split('_')))
+
+
 
 
 #Main Crawl function that calls all the above function and crawls the entire site sequentially
@@ -203,7 +212,7 @@ def web_crawl():
                     print("Link = " + urlLink)
                     print()
                     keyword = getKeyword(urlLink) 
-                    print("Keywords for link: " +keyword)
+                    print("Keywords for link:", keyword)
                     print()
 
                     
@@ -232,11 +241,11 @@ def web_crawl():
                     database [title] = pure_introduction        #Add title and its introduction to the dict
                     
                     #Writing the output data into a text file
-                    file = open('database.txt', 'a')        #Open the text file called database.txt
+                    #file = open('database.txt', 'a')        #Open the text file called database.txt
                     #file.write(title + ": " + "\n")         #Write the title of the page
-                    file.write(pure_introduction + "\n\n")      #write the introduction of that page
+                    #file.write(pure_introduction + "\n\n")      #write the introduction of that page
                     #file.write() # need to write workable links next step! <================================================================================= * IMPORTANT !
-                    file.close()                            #Close the file
+                    #file.close()                            #Close the file
                     
     
                     #Remove duplicated from to_crawl
@@ -262,6 +271,13 @@ def web_crawl():
                 print(i+k*10)
                 print()
                 print("========== Next page ==========")
+
+
+                
+
+
+                db.add(urlLink, keyword)
+
                 #print(to_crawl)
                 #print("Iteration No. = " + str(i))
                 #print("To Crawl = " + str(len(to_crawl)))
