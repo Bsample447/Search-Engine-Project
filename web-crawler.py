@@ -168,8 +168,8 @@ def url_parse(url):
 t0 = time.time()
 database = {}   #Create a dictionary
 
-# def keyWord():
-    # tbd
+def getKeyword(url):
+  return url.split('/')[-1].replace('_', ' ').lower()
 
 
 #Main Crawl function that calls all the above function and crawls the entire site sequentially
@@ -198,7 +198,10 @@ def web_crawl():
                 else:       #If the URL is not already crawled, then crawl i and extract all the links from it
                     print("Link = " + urlLink)
                     print()
-                    # keyword = getKeyword(urlLink) ========= to be used by def 
+                    keyword = getKeyword(urlLink) 
+                    print("Keywords for link: " +keyword)
+                    print()
+
                     
                     
                     raw_html = download_page(urlLink)
