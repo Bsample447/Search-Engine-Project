@@ -23,6 +23,12 @@ class Database():
 
         self.close()
 
+    def create_table(self, table, column):
+        self.connect()
+        s = f'''create table if not exists {table}{column}'''
+        self.cur.execute(s)
+        self.close()
+
     def create_schema(self):
         _schema_list = [["Keywords", """(
                            keyword_id integer primary key,
@@ -38,11 +44,8 @@ class Database():
                             unique (keyword_id, url_id))"""]]
 
         for i in _schema_list:
-            if self.exists(i[0]) == False:
-                self.create_table(i[0], i[1])
-                print(f'{i[0]} has been created')
-            else:
-                print(f'{i[0]} table already exists')
+            self.create_table(i[0], i[1])
+            print(f'{i[0]} has been created')
 
     def add(self, url, keywords):
         self.connect()
@@ -79,3 +82,21 @@ class Database():
             url_list += [url[0]]
 
         return url_list
+
+    def search(self, query):
+        self.connect()
+
+        q_tmp = []
+        for q in query:
+            print(q)
+            s = 'select keyword_id from keywords where keyword=?'
+            self.cur.execute(s, [q])
+            q_tmp += [self.cur.fetchone()[0]]
+            print(q_tmp)
+        
+        k_tmp = []
+        for k in q_tmp:
+            s = 'select url_id from keywords_urls where keyword_id=?'
+            self.cur.execute(s, [k])
+            k_tmp += [self.cur.fetchall()]
+            print(k_tmp)
