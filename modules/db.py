@@ -48,7 +48,7 @@ class Database():
                         ["URLs", """(
                            url_id integer primary key,
                            url text unique,
-                           description text unique)"""],
+                           description text)"""],
                         ["Keywords_URLs", """(
                             keyword_id integer,
                             url_id integer,
