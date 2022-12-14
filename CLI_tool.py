@@ -2,7 +2,10 @@ import os
 from modules import db                  #imports database
 from crawler import *                   #imports everything from crawler.py
 from threading import Thread            #threading
-import time                             #time for threading
+
+new_thread = Thread(target=web_crawl)   #creates web_crawl
+new_thread.daemon = True
+new_thread.start()                      #starts web_crawl
 
 
 
@@ -67,9 +70,6 @@ def search_db(keyword):
 
 if __name__ == "__main__":
     user_menu()
-    new_thread = Thread(target=web_crawl)   #creates web_crawl
-    new_thread.daemon = True
-    new_thread.start()                      #starts web_crawl
 
 
 
