@@ -173,7 +173,16 @@ t0 = time.time()
 database = {}   #Create a dictionary
 
 def getKeyword(url):
-  return url.split('/')[-1].replace('_', ' ').lower()
+    url = url.lower()
+
+    def validWord(w):
+        blacklist = ["the", "and"] 
+
+        return len(w) >= 3 and w not in blacklist
+
+    return list(filter(lambda x: validWord, url.split('/')[-1].split('_')))
+
+
 
 
 #Main Crawl function that calls all the above function and crawls the entire site sequentially
@@ -203,7 +212,7 @@ def web_crawl():
                     print("Link = " + urlLink)
                     print()
                     keyword = getKeyword(urlLink) 
-                    print("Keywords for link: " +keyword)
+                    print("Keywords for link:", keyword)
                     print()
 
                     
@@ -262,6 +271,13 @@ def web_crawl():
                 print(i+k*10)
                 print()
                 print("========== Next page ==========")
+
+
+                
+
+
+                db.add(urlLink, keyword, pure_introduction)
+
                 #print(to_crawl)
                 #print("Iteration No. = " + str(i))
                 #print("To Crawl = " + str(len(to_crawl)))
