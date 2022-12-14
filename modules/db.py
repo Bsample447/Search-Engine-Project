@@ -47,8 +47,7 @@ class Database():
                            keyword varchar(64) unique)"""],
                         ["URLs", """(
                            url_id integer primary key,
-                           url text unique,
-                           description text)"""],
+                           url text unique)"""],
                         ["Keywords_URLs", """(
                             keyword_id integer,
                             url_id integer,
@@ -69,7 +68,7 @@ class Database():
             else:
                 print(f'{i[0]} table already exists')
 
-    def add(self, url, keywords, desc):
+    def add(self, url, keywords):
         self.connect()
 
         self.cur.execute(f"""insert or ignore 
