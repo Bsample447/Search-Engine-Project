@@ -179,7 +179,7 @@ def web_crawl():
     crawled=[]      #Define list name 'Seed Page'
     #database = {}   #Create a dictionary
     #k = 0;
-    for k in range(0, 5):
+    for k in range(0, 10):
         i=0        #Initiate Variable to count No. of Iterations
         while i<10:     #Continue Looping till the 'to_crawl' list is not empty
             urlLink = to_crawl.pop(0)      #If there are elements in to_crawl then pop out the first element
@@ -248,7 +248,7 @@ def web_crawl():
                         j = j+1
                 i=i+1  
                 print()
-                print("# of links from current page")
+                print("# Depth of links from current page")
                 print(i)
                 print()
                 print("# of crawled links from last crawled page")
@@ -257,7 +257,7 @@ def web_crawl():
                 print("Total links crawled")
                 print(i+k*10)
                 print()
-                print("=========================== Next page ===================")
+                print("========== Next page ==========")
                 #print(to_crawl)
                 #print("Iteration No. = " + str(i))
                 #print("To Crawl = " + str(len(to_crawl)))
