@@ -1,5 +1,5 @@
 import os
-#from modules import db.py               #imports database
+#from modules import db, web-crawler             #imports database and web crawler
 
 def clr():                              #clearing function 
     clr = os.system('clear')
@@ -19,7 +19,7 @@ What would you like to do?
 """)
     if option == "1":
         clr()
-        keyword_input()
+        search_input()
     elif option == "2":
         pass
     elif option == "3":
@@ -27,7 +27,9 @@ What would you like to do?
     elif option == "4":
         exit()
     else:
-        input("Enter a number between 1 and 4.")
+        input("""
+    Enter a number between 1 and 4.
+""")
         clr()
         return user_menu()
 
@@ -40,16 +42,19 @@ What would you like to do?
 
 
 
-def keyword_input():                  #grabs user input and lower cases it then throws it to 'search_db'
+def search_input():                  #searches db.py for a specific keyword
+    print("'This searches db.py for key word(s)'")
     keyword = str(input(f"Type the key word(s) you would like to search for. \n")).lower()
     search_db(keyword)
-
+    #    pass                        #if keyword matches what is in db, pull the db file.
+    #else:
+    #    run_crawler()               #if keyword has no matches, run the crawler for the keyword
 
 def search_db(keyword):
-    if keyword == "mountain":           #if keyword matches what is in db, pull the db file.
+    if keyword == "mountain":
         pass
     else:
-        run_crawler(keyword)            #if keyword has no matches, run the crawler for the keyword
+        run_crawler(keyword)
 
 def run_crawler(keyword):                  #will run the crawler with user input
     print(keyword)
