@@ -241,11 +241,11 @@ def web_crawl():
                     database [title] = pure_introduction        #Add title and its introduction to the dict
                     
                     #Writing the output data into a text file
-                    file = open('database.txt', 'a')        #Open the text file called database.txt
+                    #file = open('database.txt', 'a')        #Open the text file called database.txt
                     #file.write(title + ": " + "\n")         #Write the title of the page
-                    file.write(pure_introduction + "\n\n")      #write the introduction of that page
+                    #file.write(pure_introduction + "\n\n")      #write the introduction of that page
                     #file.write() # need to write workable links next step! <================================================================================= * IMPORTANT !
-                    file.close()                            #Close the file
+                    #file.close()                            #Close the file
                     
     
                     #Remove duplicated from to_crawl
@@ -276,7 +276,7 @@ def web_crawl():
                 
 
 
-                db.add(urlLink, keyword, pure_introduction)
+                db.add(urlLink, keyword)
 
                 #print(to_crawl)
                 #print("Iteration No. = " + str(i))
