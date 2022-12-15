@@ -159,6 +159,14 @@ def url_parse(url):
         elif not s.scheme:
             url = "http://" + url.lstrip('/')
             flag = 0
+        elif ".ogg" in url:
+            flag = 1
+        elif "upload." in url:
+            flag = 1
+        elif "Help:IPA" in url:
+            flag = 1
+        elif "%" in url:
+            flag = 1
         #elif "www" not in url:
         #    url = "www."[:7] + url[7:]
         #    flag = 0
