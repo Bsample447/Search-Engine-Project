@@ -41,26 +41,74 @@ class Database():
                             url_id integer,
                             foreign key(keyword_id) references Keywords(keyword_id),
                             foreign key(url_id) references URLs(urls_id),
-                            unique (keyword_id, url_id))"""]]
+                            unique (keyword_id, url_id))"""],
+                        ["Crawled_URLs", """(
+                            url_id integer unique,
+                            foreign key (url_id) references URLs(url_id))"""]]
 
         for i in _schema_list:
             self.create_table(i[0], i[1])
             print(f'{i[0]} has been created')
 
+    def remember(self, urls):
+        """Takes a list of URLs that are known but not necessarily crawled and adds them to the database of known URLs"""
+        self.connect()
+
+        self.cur.executemany("""insert or ignore 
+                                  into URLs(url) 
+                                  values(?)""", map(lambda url: (url,), urls))
+
+        self.close()
+
+    def nextUrl(self):
+        """Compares the list of known URLs with the list of crawled URLs and returns the oldest uncrawled"""
+        self.connect()
+
+        self.cur.execute("select url from URLs where url_id not in (select url_id from Crawled_URLs) order by url_id limit 1")
+
+        res = self.cur.fetchone()
+
+        self.close()
+
+        if res == None:
+            return None
+        else:
+            return res[0]
+
+    def linksCrawled(self):
+        self.connect()
+
+        self.cur.execute("select count(*) from Crawled_URLs")
+
+        res = self.cur.fetchone()
+
+        self.close()
+
+        return res[0]
+
+    def knownURLs(self):
+        self.connect()
+
+        self.cur.execute("select count(*) from URLs")
+
+        res = self.cur.fetchone()
+
+        self.close()
+
+        return res[0]
+
     def add(self, url, keywords):
         self.connect()
 
-        self.cur.execute(f"""insert or ignore 
-                               into URLs(url) 
-                               values('{url}')""")
+        self.cur.execute(f"select url_id from urls where url = '{url}'")
+        url_id = self.cur.fetchone()[0]
+
+        self.cur.execute("insert or ignore into Crawled_URLs(url_id) values(?)", (url_id,))
 
         for keyword in keywords:
             self.cur.execute(f"""insert or ignore
                                    into Keywords(keyword) 
                                    values('{keyword}')""")
-
-            self.cur.execute(f"select url_id from urls where url = '{url}'")
-            url_id = self.cur.fetchone()[0]
 
             self.cur.execute(f"select keyword_id from keywords where keyword = '{keyword}'")
             keyword_id = self.cur.fetchone()[0]
@@ -73,7 +121,7 @@ class Database():
 
     def crawled(self):
         self.connect()
-        self.cur.execute(f"select url from URLs")
+        self.cur.execute(f"select url from URLs where url_id in (select url_id from Crawled_URLs)")
         url_list = []
         tmp = self.cur.fetchall()
         self.close()

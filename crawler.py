@@ -22,10 +22,16 @@ def download_page(url):
     try:
         headers = {}
         headers['User-Agent'] = "Mozilla/5.0 (X11; Linux i686) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.27 Safari/537.17"
-        req = urllib.request.Request(url, headers = headers)
+        req = urllib.request.Request(url, headers = headers, method="HEAD")
         resp = urllib.request.urlopen(req)
-        respData = str(resp.read())
-        return respData
+
+        if "text/html" in resp.getheader('content-type'):
+            req = urllib.request.Request(url, headers = headers, method="GET")
+            resp = urllib.request.urlopen(req)
+            respData = str(resp.read())
+            return respData
+        else:
+            return None
     except Exception as e:
         print(str(e))
 
@@ -93,7 +99,8 @@ def get_all_links(page):
         if link == "no_links":
             break
         else:
-            links.append(link)      #Append all the links in the list named 'Links'
+            if link.startswith("/") or link.startswith(seed_page):
+                links.append(link)      #Append all the links in the list named 'Links'
             #time.sleep(0.1)
             page = page[end_link:]
     return links 
@@ -135,13 +142,11 @@ def url_parse(url):
     #t = urlparse(seed_page_n)     #parse the seed page (reference page)
     i = 0
     flag = 0
+
     while i<=9:
         if url == "/":
             url = seed_page_n
             flag = 0  
-        elif not s.scheme:
-            url = "http://" + url
-            flag = 0
         elif "#" in url:
             url = url[:url.find("#")]
             flag = 0
@@ -150,6 +155,9 @@ def url_parse(url):
             flag = 0
         elif s.netloc == "":
             url = seed_page + s.path
+            flag = 0
+        elif not s.scheme:
+            url = "http://" + url.lstrip('/')
             flag = 0
         #elif "www" not in url:
         #    url = "www."[:7] + url[7:]
@@ -169,7 +177,13 @@ def url_parse(url):
         
         i = i+1
         s = urlparse(url)   #Parse after every loop to update the values of url parameters
-    return(url, flag)
+
+    flag2 = extension_scan(url)
+
+    if flag == 1 or flag2 == 1:
+        return None
+    else:
+        return url
      
 t0 = time.time()
 database = {}   #Create a dictionary
@@ -185,108 +199,99 @@ def getKeyword(url):
     return list(filter(validWord, url.split('/')[-1].split('_')))
 
 
-
-
 #Main Crawl function that calls all the above function and crawls the entire site sequentially
 def web_crawl():
     starting_list = ["https://en.wikipedia.org/wiki/Roman_Empire"]
     starting_list += db.crawled()
     starting_page = starting_list[-1]  
-    to_crawl = [starting_page]      #Define list name 'Seed Page'
-    #print(to_crawl)
+
+    db.remember([starting_page])
+    
     crawled=[]      #Define list name 'Seed Page'
     #database = {}   #Create a dictionary
-    #k = 0;
-    for k in range(0, 10):
-        i=0        #Initiate Variable to count No. of Iterations
-        while i<10:     #Continue Looping till the 'to_crawl' list is not empty
-            urlLink = to_crawl.pop(0)      #If there are elements in to_crawl then pop out the first element
-            urlLink,flag = url_parse(urlLink)
-            #print(urll)
-            flag2 = extension_scan(urlLink)
-            time.sleep(0.1)
-            
-            #If flag = 1, then the URL is outside the seed domain URL
-            if flag == 1 or flag2 == 1:
-                pass        #Do Nothing
-                
-            else:       
-                if urlLink in crawled:     #Else check if the URL is already crawled
-                    pass        #Do Nothing
-                else:       #If the URL is not already crawled, then crawl i and extract all the links from it
-                    print("Link = " + urlLink)
-                    print()
-                    keyword = getKeyword(urlLink) 
-                    print("Keywords for link:", keyword)
-                    print()
 
-                    
-                    
-                    raw_html = download_page(urlLink)
-                    #print(raw_html)
-                    
-                    title_upper = str(extract_title(raw_html))
-                    title = title_upper.lower()     #Lower title to match user queries
-                    #print("Title = " + title)
-                    
-                    
-                    see_also,flag2 = extract_see_also(raw_html)
-                    #print("Related Links = " + see_also)
-                    
-                    
-                    raw_introduction = extract_introduction(raw_html)
-                    #print("Raw Introduction = " + raw_introduction)
-                    
-                    to_crawl = to_crawl + get_all_links(raw_introduction)
-                    crawled.append(urlLink)
-                    
-                    pure_introduction = extract_pure_introduction(raw_introduction)
-                    #print("Introduction = " + pure_introduction.replace('   ',' '))        ================  Paused printing of intro section
-                    
-                    database [title] = pure_introduction        #Add title and its introduction to the dict
-                    
-                    #Writing the output data into a text file
-                    #file = open('database.txt', 'a')        #Open the text file called database.txt
-                    #file.write(title + ": " + "\n")         #Write the title of the page
-                    #file.write(pure_introduction + "\n\n")      #write the introduction of that page
-                    #file.write() #
-                    #file.close()                            #Close the file
-                    
-    
-                    #Remove duplicated from to_crawl
-                    n = 1
-                    j = 0
-                    #k = 0
-                    while j < (len(to_crawl)-n):
-                        if to_crawl[j] in to_crawl[j+1:(len(to_crawl)-1)]:
-                            to_crawl.pop(j)
-                            n = n+1
-                        else:
-                            pass     #Do Nothing
-                        j = j+1
-                i=i+1  
-                print()
-                print("# Depth of links from current page")
-                print(i)
-                print()
-                print("# of crawled links from last crawled page")
-                print(k)
-                print()
-                print("Total links crawled")
-                print(i+k*10)
-                print()
-                print("========== Next page ==========")
+    linksCrawled = 0
 
+    while True:
+        urlLink = db.nextUrl()     #If there are elements in to_crawl then pop out the first element
 
-                
+        if urlLink == "None":
+            print("Out of links")
+            break
 
+        print("Link = " + urlLink)
+        print()
+        keyword = getKeyword(urlLink) 
+        print("Keywords for link:", keyword)
+        print()
 
-                db.add(urlLink, keyword)
+        raw_html = download_page(urlLink)
+        #print(raw_html)
 
-                #print(to_crawl)
-                #print("Iteration No. = " + str(i))
-                #print("To Crawl = " + str(len(to_crawl)))
-                #print("Crawled = " + str(len(crawled)))
+        if raw_html == None: continue
+
+        title_upper = str(extract_title(raw_html))
+        title = title_upper.lower()     #Lower title to match user queries
+        #print("Title = " + title)
+        
+        
+        see_also,flag2 = extract_see_also(raw_html)
+        #print("Related Links = " + see_also)
+        
+        
+        raw_introduction = extract_introduction(raw_html)
+        #print("Raw Introduction = " + raw_introduction)
+        
+        all_links = get_all_links(raw_introduction)
+        all_links = filter(None, map(url_parse, all_links))
+        db.remember(all_links)
+
+        crawled.append(urlLink)
+        
+        #pure_introduction = extract_pure_introduction(raw_introduction)
+        #print("Introduction = " + pure_introduction.replace('   ',' '))        ================  Paused printing of intro section
+        
+        #database [title] = pure_introduction        #Add title and its introduction to the dict
+        
+        #Writing the output data into a text file
+        #file = open('database.txt', 'a')        #Open the text file called database.txt
+        #file.write(title + ": " + "\n")         #Write the title of the page
+        #file.write(pure_introduction + "\n\n")      #write the introduction of that page
+        #file.write() #
+        #file.close()                            #Close the file
+        
+
+        #Remove duplicated from to_crawl
+        # n = 1
+        # j = 0
+
+        # while j < (len(to_crawl)-n):
+        #     if to_crawl[j] in to_crawl[j+1:(len(to_crawl)-1)]:
+        #         to_crawl.pop(j)
+        #         n = n+1
+        #     else:
+        #         pass     #Do Nothing
+        #     j = j+1
+
+        linksCrawled = db.linksCrawled()
+        knownURLs = db.knownURLs()
+        remaining = knownURLs - linksCrawled
+
+        print("Total links crawled")
+        print(linksCrawled)
+        print()
+        print("Links left to crawl")
+        print(remaining)
+        print()
+        print("========== Next page ==========")
+
+        db.add(urlLink, keyword)
+
+        #print(to_crawl)
+        #print("Iteration No. = " + str(i))
+        #print("To Crawl = " + str(len(to_crawl)))
+        #print("Crawled = " + str(len(crawled)))
+
     return ""
 
 
