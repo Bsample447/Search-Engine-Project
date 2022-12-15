@@ -48,7 +48,7 @@ class Database():
 
         for i in _schema_list:
             self.create_table(i[0], i[1])
-            print(f'{i[0]} has been created')
+            #print(f'{i[0]} has been created')
 
     def remember(self, urls):
         """Takes a list of URLs that are known but not necessarily crawled and adds them to the database of known URLs"""

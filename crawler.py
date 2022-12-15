@@ -10,6 +10,7 @@ from modules import db
 db = db.Database()
 
 
+
 #Defining pages
 #starting_list = ["https://en.wikipedia.org/wiki/Roman_Empire"]
 #starting_list += db.crawled()
@@ -224,14 +225,14 @@ def web_crawl():
         urlLink = db.nextUrl()     #If there are elements in to_crawl then pop out the first element
 
         if urlLink == "None":
-            print("Out of links")
+            #print("Out of links")
             break
 
-        print("Link = " + urlLink)
-        print()
+        #print("Link = " + urlLink)
+        #print()
         keyword = getKeyword(urlLink) 
-        print("Keywords for link:", keyword)
-        print()
+        #print("Keywords for link:", keyword)
+        #print()
 
         raw_html = download_page(urlLink)
         #print(raw_html)
@@ -285,13 +286,13 @@ def web_crawl():
         knownURLs = db.knownURLs()
         remaining = knownURLs - linksCrawled
 
-        print("Total links crawled")
-        print(linksCrawled)
-        print()
-        print("Links left to crawl")
-        print(remaining)
-        print()
-        print("========== Next page ==========")
+        #print("Total links crawled")
+        #print(linksCrawled)
+        #print()
+        #print("Links left to crawl")
+        #print(remaining)
+        #print()
+        #print("========== Next page ==========")
 
         db.add(urlLink, keyword)
 
@@ -307,12 +308,12 @@ def web_crawl():
 
 if __name__ == "__main__":
     db.create_schema()
-    print (web_crawl())
-    print()
+    web_crawl()
+    #print()
 
     
 
 
 t1 = time.time()
 total_time = t1-t0
-print(total_time)
+#print(total_time)
