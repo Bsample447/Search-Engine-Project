@@ -164,3 +164,21 @@ class Database():
             result = []
 
         return result
+    
+    def show_list(self, sl)
+        match sl:
+
+            case 'keywords':
+                s = 'select count(keyword) from Keywords'
+            case 'urls':
+                s = 'select count(url) from URLs'
+            case _:
+                return "Incorrect syntax"
+
+        self.connect()
+        self.cur.execute(s)
+        tmp = self.cur.fetchall()
+        self.close()
+
+        result = tmp[0]
+        return result
