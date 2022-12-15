@@ -4,16 +4,6 @@ import crawler                          #imports everything from crawler.py
 from threading import Thread            #threading
 import time                             #time for threading
 
-
-
-new_thread = Thread(target=crawler.web_crawl)   #creates web_crawl
-new_thread.daemon = True
-new_thread.start()                      #starts web_crawl
-
-
-
-
-
 ###############################################################################
 #                               Functions                                     #
 ###############################################################################
@@ -21,9 +11,6 @@ new_thread.start()                      #starts web_crawl
 def clr():                              #clearing function 
     clr = os.system('clear')
     return clr
-
-
-
 
 def user_menu():                        #first user menu
     #clr()
@@ -65,8 +52,6 @@ Press any key to continue.
         #clr()
         return user_menu()
 
-
-
 def search_input():                  #passes db.py user input keyword
     search_input = str.lower(input(f"Type the key word(s) you would like to search for. \n"))
     keyword = search_input.split()
@@ -78,11 +63,6 @@ def search_input():                  #passes db.py user input keyword
     print()
     user_menu()
 
-
-
-    
-
-
 ###############################################################################
 #                               Main                                          #
 ###############################################################################
@@ -90,6 +70,9 @@ def search_input():                  #passes db.py user input keyword
 if __name__ == "__main__":
     db = db.Database()
     db.create_schema()
+    new_thread = Thread(target=crawler.web_crawl)      #creates web_crawl
+    new_thread.daemon = True
+    new_thread.start()                                  #starts web_crawl
     user_menu()
 
 
