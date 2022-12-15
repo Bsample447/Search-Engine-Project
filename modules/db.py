@@ -165,7 +165,7 @@ class Database():
 
         return result
     
-    def show_list(self, sl)
+    def show_list(self, sl):
         match sl:
 
             case 'keywords':
@@ -180,5 +180,5 @@ class Database():
         tmp = self.cur.fetchall()
         self.close()
 
-        result = tmp[0]
+        result = tmp[0][0]
         return result

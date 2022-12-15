@@ -36,7 +36,20 @@ def user_menu():                        #first user menu
     if option == "1":
         #clr()
         search_input()
+
     elif option == "2":
+        result = str(db.show_list("keywords"))
+        print("Total Number of Keywords in Database:", result)
+        print()
+        user_menu()
+
+    elif option == "3":
+        result = str(db.show_list("urls"))
+        print("Total Number of URLs in Database:", result)
+        print()
+        user_menu()
+    
+    elif option == "4":
         quit = str.lower(input("""Are you sure you want to quit?
 (Type 'yes' to quit)\n"""))
         if quit == "yes":
@@ -44,10 +57,6 @@ def user_menu():                        #first user menu
         else:
             #clr()
             return user_menu()
-    elif option == "3":
-        list_keywords()
-    elif option == "4":
-        list_URLs()
     else:
         #clr()
         input("""Enter a number between 1 and 2.
@@ -59,22 +68,17 @@ Press any key to continue.
 
 
 def search_input():                  #passes db.py user input keyword
-    print("'This passes key word(s) to db.py'")
     search_input = str.lower(input(f"Type the key word(s) you would like to search for. \n"))
     keyword = search_input.split()
     result = db.search(keyword)
-    print("Here are your search results:")
+    #clr()
+    print("Here are your search results:\n")
     for i in result:
         print(i)
-        print()
+    print()
     user_menu()
 
-def list_keywords():
-    pass
 
-
-def list_URLs():
-    pass
 
     
 
