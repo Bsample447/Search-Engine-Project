@@ -136,7 +136,7 @@ class Database():
 
         req = ""
         for q in query:
-            req += "'%" + q + "%', "
+            req += "'" + q + "', "
         req = req[:-2]
         s = f'''select url, cnt 
                  from URLs 
@@ -147,7 +147,7 @@ class Database():
                        select keyword_id 
                          from keywords 
                          where keyword 
-                           like ({req})) 
+                           in ({req})) 
                          group by url_id order by cnt desc, url_id) as ks 
                            on URLs.url_id = ks.url_id limit 15'''
 
