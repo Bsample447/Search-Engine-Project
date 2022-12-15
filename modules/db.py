@@ -134,17 +134,33 @@ class Database():
     def search(self, query):
         self.connect()
 
-        q_tmp = []
+        req = ""
         for q in query:
-            print(q)
-            s = 'select keyword_id from keywords where keyword=?'
-            self.cur.execute(s, [q])
-            q_tmp += [self.cur.fetchone()[0]]
-            print(q_tmp)
-        
-        k_tmp = []
-        for k in q_tmp:
-            s = 'select url_id from keywords_urls where keyword_id=?'
-            self.cur.execute(s, [k])
-            k_tmp += [self.cur.fetchall()]
-            print(k_tmp)
+            req += "'" + q + "', "
+        req = req[:-2]
+        s = f'''select url, cnt 
+                 from URLs 
+                 join (
+                   select url_id, count(keyword_id) as cnt 
+                     from Keywords_URLs 
+                     where keyword_id in (
+                       select keyword_id 
+                         from keywords 
+                         where keyword 
+                           in ({req})) 
+                         group by url_id order by cnt desc, url_id) as ks 
+                           on URLs.url_id = ks.url_id limit 15'''
+
+        self.connect()
+        self.cur.execute(s)
+        tmp = self.cur.fetchall()
+        self.close()
+
+        result = []
+        for url in tmp:
+            result += [url[0]]
+
+        if result == None:
+            result = []
+
+        return result

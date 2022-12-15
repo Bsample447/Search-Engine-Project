@@ -5,4 +5,9 @@ if __name__ == "__main__":
     db = db.Database()
     db.create_schema()
     #crawler.web_crawl()
-    db.search(['roman', 'empire', 'war'])
+
+    query_input = ['brandon', 'is', 'a', 'roman', 'turd']
+    result = db.search(query_input)
+
+    for url in result:
+        print(url)
