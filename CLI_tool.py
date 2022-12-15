@@ -46,7 +46,7 @@ def user_menu():                        #first user menu
             return user_menu()
     else:
         #clr()
-        input("""Enter a number between 1 and 2.
+        input("""Enter a number between 1 and 4.
 Press any key to continue.
 """)
         #clr()
