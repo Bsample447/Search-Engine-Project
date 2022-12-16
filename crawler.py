@@ -230,7 +230,7 @@ def web_crawl():
 
         #print("Link = " + urlLink)
         #print()
-        keyword = getKeyword(urlLink) 
+        #keyword = getKeyword(urlLink) 
         #print("Keywords for link:", keyword)
         #print()
 
