@@ -5,7 +5,7 @@ import sqlite3
 import time    
 import urllib.request    #Extracting web pages
 import re
-import db
+from modules import db
 
 db = db.Database()
 
