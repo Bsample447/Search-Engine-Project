@@ -63,7 +63,6 @@ Sorry, no results at this time.
         user_menu()
     else:
         print("Here are your search results:\n")
-        print(result)
         for i in result:
             print(i)
         print()
