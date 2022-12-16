@@ -2,7 +2,7 @@ import os
 from modules import db                  #imports database
 import crawler                          #imports everything from crawler.py
 from threading import Thread            #threading
-import time                             #time for threading
+
 
 ###############################################################################
 #                               Functions                                     #
@@ -53,15 +53,21 @@ Press any key to continue.
         return user_menu()
 
 def search_input():                  #passes db.py user input keyword
-    search_input = str.lower(input(f"Type the key word(s) you would like to search for. \n"))
+    search_input = str.lower(input("Type the key word(s) you would like to search for. \n"))
     keyword = search_input.split()
     result = db.search(keyword)
-    #clr()
-    print("Here are your search results:\n")
-    for i in result:
-        print(i)
-    print()
-    user_menu()
+    if result == []:
+        print("""
+Sorry, no results at this time.
+            """)
+        user_menu()
+    else:
+        print("Here are your search results:\n")
+        print(result)
+        for i in result:
+            print(i)
+        print()
+        user_menu()
 
 ###############################################################################
 #                               Main                                          #
