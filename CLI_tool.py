@@ -8,12 +8,9 @@ from threading import Thread            #threading
 #                               Functions                                     #
 ###############################################################################
 
-def clr():                              #clearing function 
-    clr = os.system('clear')
-    return clr
+
 
 def user_menu():                        #first user menu
-    #clr()
     option = input("""What would you like to do?
     1.) New Search
     2.) List Total Number of Keywords
@@ -21,7 +18,6 @@ def user_menu():                        #first user menu
     4.) Exit
 """)
     if option == "1":
-        #clr()
         search_input()
 
     elif option == "2":
@@ -42,14 +38,11 @@ def user_menu():                        #first user menu
         if quit == "yes":
             exit()
         else:
-            #clr()
             return user_menu()
     else:
-        #clr()
         input("""Enter a number between 1 and 4.
 Press any key to continue.
 """)
-        #clr()
         return user_menu()
 
 def search_input():                  #passes db.py user input keyword
