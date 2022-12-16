@@ -1,6 +1,6 @@
 import os
 from modules import db                  #imports database
-import crawler                          #imports everything from crawler.py
+from modules import crawler                         #imports everything from crawler.py
 from threading import Thread            #threading
 
 
