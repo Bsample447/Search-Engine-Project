@@ -11,11 +11,19 @@ from threading import Thread            #threading
 
 
 def user_menu():                        #first user menu
-    option = input("""What would you like to do?
-    1.) New Search
-    2.) List Total Number of Keywords
-    3.) List Total Number of URLs
-    4.) Exit
+    option = input("""
+                    - WIKI SEARCH TOOL -
+    ####################################################
+    What would you like to do?                        ##
+                                                      ##
+    1.) New Search                                    ##
+                                                      ##
+    2.) List Total Number of Keywords                 ##
+                                                      ##
+    3.) List Total Number of URLs                     ##
+                                                      ##
+    4.) Exit                                          ##
+    ####################################################
 """)
     if option == "1":
         search_input()
