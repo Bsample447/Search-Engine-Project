@@ -16,8 +16,8 @@ def user_menu():                        #first user menu
     #clr()
     option = input("""What would you like to do?
     1.) New Search
-    2.) List Keywords
-    3.) List URLs
+    2.) List Total Number of Keywords
+    3.) List Total Number of URLs
     4.) Exit
 """)
     if option == "1":
