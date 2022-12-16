@@ -136,8 +136,9 @@ class Database():
 
         req = ""
         for q in query:
-            req += "'" + q + "', "
-        req = req[:-2]
+            req += "keyword like '%" + q + "%' or "
+        req = req[:-4]
+        print(req)
         s = f'''select url, cnt 
                  from URLs 
                  join (
@@ -146,11 +147,10 @@ class Database():
                      where keyword_id in (
                        select keyword_id 
                          from keywords 
-                         where keyword 
-                           in ({req})) 
+                         where ({req})) 
                          group by url_id order by cnt desc, url_id) as ks 
                            on URLs.url_id = ks.url_id limit 15'''
-
+        print(s)
         self.connect()
         self.cur.execute(s)
         tmp = self.cur.fetchall()
