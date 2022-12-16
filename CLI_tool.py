@@ -57,8 +57,8 @@ def search_input():                  #passes db.py user input keyword
     keyword = search_input.split()
     result = db.search(keyword)
     if result == []:
-        print("""
-Sorry, no results at this time.
+        print(f"""
+Sorry, no results for {search_input}.
             """)
         user_menu()
     else:
